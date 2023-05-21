@@ -1,4 +1,7 @@
+import 'package:cart_scan/providers/login_provider.dart';
 import 'package:cart_scan/providers/ui_provider.dart';
+import 'package:cart_scan/providers/user_provider.dart';
+import 'package:cart_scan/routes/routes.dart';
 import 'package:cart_scan/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +19,12 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => UIProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => LoginProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        )
       ],
       child: MyApp(),
     ),
@@ -36,13 +45,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialRoute: 'home',
-      routes: {
-        'home': (context) => const HomeScreen(),
-        'scan': (context) => const ScanScreen(),
-        'list': (context) => const ListScreen(),
-        'search': (context) => const SearchScreen(),
-        'compare': (context) => const CompareScreen(),
-      },
+      routes: customRoutes,
     );
   }
 }

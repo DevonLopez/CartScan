@@ -1,11 +1,12 @@
-import 'package:caparrots_initial/widgets/widgets.dart';
+import 'package:cart_scan/providers/login_provider.dart';
+import 'package:cart_scan/widgets/widgets.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/providers.dart';
 import '../utils/utils.dart';
+import '../widgets/google_button.dart';
 
 class LogInScreen extends StatefulWidget {
   final Function()? onTap;
@@ -23,6 +24,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 150, 226, 88),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,20 +33,15 @@ class _LogInScreenState extends State<LogInScreen> {
             const SizedBox(
               height: 50,
             ),
-            CircleAvatar(
-              radius: 80,
-              backgroundColor: Colors.white,
-              child: Image.asset(
-                'assets/logotransparent.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-            const Divider(
-              color: Colors.white,
+            Image.asset(
+              'assets/logoCart.png',
+              fit: BoxFit.cover,
+              cacheHeight: 200,
+              cacheWidth: 220,
             ),
             fieldEmail(),
             const Divider(
-              color: Colors.white,
+              color: Color.fromARGB(0, 0, 0, 0),
             ),
             fieldPassword(context),
             Row(
@@ -58,13 +55,13 @@ class _LogInScreenState extends State<LogInScreen> {
                     Navigator.pushNamed(context, 'Reset',
                         arguments: _email.text);
                   },
-                  child: const Text('Contrasenya perduda?'),
+                  child: const Text('Olvidaste la contraseña?'),
                 )
               ],
             ),
             MyButton(
               onTap: signIn,
-              text: "Registrar",
+              text: "Iniciar Sesión",
             ),
             const SizedBox(
               height: 20,
@@ -82,7 +79,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
-                      'Continuar amb',
+                      'Continuar con',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
@@ -103,13 +100,13 @@ class _LogInScreenState extends State<LogInScreen> {
               children: const [GoogleButton()],
             ),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'No tens compte?',
+                  'No tienes cuenta?',
                   style: TextStyle(color: Colors.black),
                 ),
                 const SizedBox(
@@ -118,7 +115,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 GestureDetector(
                   onTap: widget.onTap,
                   child: const Text(
-                    'Clica aqui!!',
+                    'Haz click aquí!!',
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.black),
                   ),
@@ -140,15 +137,15 @@ class _LogInScreenState extends State<LogInScreen> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (email) => email != null && EmailValidator.validate(email)
             ? null
-            : 'Introdueix un email valid',
+            : 'Introduce un correo electrónico válido',
         decoration: InputDecoration(
-          labelText: 'Email',
+          labelText: 'Correo Electrónico',
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black, width: 10),
             borderRadius: BorderRadius.circular(8),
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: const Color.fromARGB(255, 172, 248, 211),
         ),
       ),
     );
@@ -162,12 +159,12 @@ class _LogInScreenState extends State<LogInScreen> {
       child: TextFormField(
         autovalidateMode: AutovalidateMode.onUserInteraction,
         validator: (valor) => valor != null && valor.length < 6
-            ? 'Introdueix un minim de 6 caracters'
+            ? 'Introduce un mínimo de 6 letras'
             : null,
         controller: _constrasena,
         obscureText: passwProvider.password,
         decoration: InputDecoration(
-          labelText: 'Contrasenya',
+          labelText: 'Contraseña',
           border: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.black, width: 10),
             borderRadius: BorderRadius.circular(8),
@@ -181,7 +178,7 @@ class _LogInScreenState extends State<LogInScreen> {
             },
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: const Color.fromARGB(255, 172, 248, 211),
         ),
       ),
     );
@@ -199,7 +196,8 @@ class _LogInScreenState extends State<LogInScreen> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _constrasena.text.trim());
     } on FirebaseAuthException {
-      Utils.showSnackBar("El email o la contrasenya no son correctes");
+      Utils.showSnackBar(
+          "El correo electrónico o la contraseña no son correctos");
     }
   }
 }
