@@ -1,33 +1,29 @@
 import 'package:cart_scan/models/models.dart';
 
 class ShoppingList {
-  late String id;
-  late String name;
-  late List<Item> items;
+  final String id;
+  final String name;
+  final String userId;
+  List<Item>? items;
 
-  ShoppingList({required this.id, required this.name, required this.items});
+  ShoppingList({
+    required this.id,
+    required this.name,
+    required this.userId,
+    this.items,
+  });
 
-  ShoppingList.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    if (json['items'] != null) {
-      json['items'].forEach((v) {
-        items.add(Item.fromJson(v));
-      });
-    }
-  }
+  factory ShoppingList.fromMap(Map<String, dynamic> json) => ShoppingList(
+        id: json["id"],
+        name: json["name"],
+        userId: json["userId"],
+        items: List<Item>.from(json["items"].map((x) => Item.fromMap(x))),
+      );
 
-  ShoppingList.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    name = map['name'];
-    items = List<Item>.from(map['items']?.map((x) => Item.fromMap(x)) ?? []);
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['items'] = this.items.map((v) => v.toJson()).toList();
-    return data;
-  }
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "name": name,
+        "userId": userId,
+        "items": List<dynamic>.from(items!.map((x) => x.toMap())),
+      };
 }

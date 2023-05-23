@@ -10,15 +10,23 @@ import 'package:provider/provider.dart';
 import '../providers/ui_provider.dart';
 import '../widgets/widgets.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({Key? key}) : super(key: key);
 
   @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  List<ShoppingList> userLists = [];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final userProvider = Provider.of<UserProvider>(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final users = Provider.of<UserProvider>(context, listen: false);
-    users.getApiUsers();
-    List<UserModel> usuarios = users.users;
-    usuarios.toString();
     Widget cancelButton = TextButton(
       child: Text("Cancel"),
       onPressed: () {
@@ -84,11 +92,14 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class _DetailsScreenBody extends StatelessWidget {
-  const _DetailsScreenBody({Key? key}) : super(key: key);
+  const _DetailsScreenBody({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UIProvider>(context);
+    //print(userLists);
 
     final currentIndex = uiProvider.menuOpt;
 

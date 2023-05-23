@@ -6,18 +6,64 @@ import 'package:cart_scan/models/models.dart';
 FirebaseFirestore db = FirebaseFirestore.instance;
 FirebaseAuth _auth = FirebaseAuth.instance;
 final User? user = _auth.currentUser;
-String? uid;
 
-Future<List<UserModel>> getUsers() async {
-  List<UserModel> users = [];
+Future<UserModel> getUserData() async {
+  final user = _auth.currentUser;
+  if (user == null) {
+    throw Exception('User not logged in');
+  }
 
-  CollectionReference collectionUsers = db.collection("users");
+  final userId = user.uid;
+  final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+  final userData = await userDoc.get();
+  if (!userData.exists) {
+    throw Exception('User data not found');
+  }
+  final userMap = userData.data() as Map<String, dynamic>;
+  final userModel = UserModel.fromMap(userMap);
 
-  QuerySnapshot queryUsers = await collectionUsers.get();
+  // Obtener las listas del usuario
+  final listDocs =
+      await db.collection('lists').where('userId', isEqualTo: userId).get();
+  final lists = <ShoppingList>[];
 
-  queryUsers.docs.forEach((element) {
-    users.add(UserModel.fromMap(element.data() as Map<String, dynamic>));
-  });
-  print(users.toString());
-  return users;
+  for (final doc in listDocs.docs) {
+    final listMap = doc.data() as Map<String, dynamic>;
+    final listId = doc.id;
+    final listName = listMap['name'];
+
+    // Obtener los elementos de la lista
+    final itemDocs =
+        await db.collection('items').where('listId', isEqualTo: listId).get();
+    final items = <Item>[];
+    print(itemDocs.docs.length);
+    for (final itemDoc in itemDocs.docs) {
+      final itemMap = itemDoc.data() as Map<String, dynamic>;
+      final itemId = itemDoc.id; // ID del documento autogenerado
+      final item = Item(
+        id: itemId,
+        listId: listId,
+        name: itemMap['name'],
+        description: itemMap['description'],
+        image: itemMap['image'],
+        price: itemMap['price']?.toDouble(),
+        discount: itemMap['discount']?.toDouble(),
+        quality: itemMap['quality'],
+        offer: itemMap['offer'],
+      );
+      items.add(item);
+    }
+
+    final shoppingList = ShoppingList(
+      id: listId,
+      name: listName,
+      userId: userId,
+      items: items,
+    );
+    lists.add(shoppingList);
+  }
+
+  userModel.lists = lists;
+
+  return userModel;
 }
