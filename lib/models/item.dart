@@ -3,7 +3,6 @@ class Item {
   final String listId;
   final String name;
   final String description;
-  final String image;
   final double price;
   final double discount;
   final int quality;
@@ -14,7 +13,6 @@ class Item {
     required this.listId,
     required this.name,
     required this.description,
-    required this.image,
     required this.price,
     required this.discount,
     required this.quality,
@@ -27,7 +25,6 @@ class Item {
     final String? listId = json["listId"];
     final String? name = json["name"];
     final String? description = json["description"];
-    final String? image = json["image"];
     final double? price = json["price"]?.toDouble();
     final double? discount = json["discount"]?.toDouble();
     final int? quality = json["quality"];
@@ -36,7 +33,6 @@ class Item {
     if (listId == null ||
         name == null ||
         description == null ||
-        image == null ||
         price == null ||
         discount == null ||
         quality == null ||
@@ -49,7 +45,6 @@ class Item {
       listId: listId,
       name: name,
       description: description,
-      image: image,
       price: price,
       discount: discount,
       quality: quality,
@@ -63,7 +58,6 @@ class Item {
       "listId": listId,
       "name": name,
       "description": description,
-      "image": image,
       "price": price,
       "discount": discount,
       "quality": quality,

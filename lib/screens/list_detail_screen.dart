@@ -1,4 +1,5 @@
 import 'package:cart_scan/models/models.dart';
+import 'package:cart_scan/screens/screens.dart';
 import 'package:flutter/material.dart';
 
 class ListDetailScreen extends StatelessWidget {
@@ -21,6 +22,14 @@ class ListDetailScreen extends StatelessWidget {
             title: Text(item.name),
             subtitle: Text(item.description),
             trailing: Text('\$${item.price.toStringAsFixed(2)}'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ItemDetailScreen(item: item),
+                ),
+              );
+            },
           );
         },
       ),

@@ -36,16 +36,16 @@ Future<UserModel> getUserData() async {
     final itemDocs =
         await db.collection('items').where('listId', isEqualTo: listId).get();
     final items = <Item>[];
-    print(itemDocs.docs.length);
+
     for (final itemDoc in itemDocs.docs) {
       final itemMap = itemDoc.data() as Map<String, dynamic>;
+      print(itemMap.toString());
       final itemId = itemDoc.id; // ID del documento autogenerado
       final item = Item(
         id: itemId,
         listId: listId,
         name: itemMap['name'],
         description: itemMap['description'],
-        image: itemMap['image'],
         price: itemMap['price']?.toDouble(),
         discount: itemMap['discount']?.toDouble(),
         quality: itemMap['quality'],

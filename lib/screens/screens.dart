@@ -8,3 +8,4 @@ export 'package:cart_scan/screens/login_screen.dart';
 export 'package:cart_scan/screens/home_screen.dart';
 export 'package:cart_scan/screens/register_screen.dart';
 export 'package:cart_scan/screens/list_detail_screen.dart';
+export 'package:cart_scan/screens/item_detail_screen.dart';
