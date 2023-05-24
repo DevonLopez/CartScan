@@ -1,11 +1,25 @@
+import 'package:cart_scan/providers/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cart_scan/models/models.dart';
+import 'package:provider/provider.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+
+class ListService {
+  static Future<void> createList(ShoppingList shoppingList) async {
+    final listDoc = FirebaseFirestore.instance.collection('lists').doc();
+    final user = _auth.currentUser;
+    final userId = user!.uid;
+    shoppingList.id = listDoc.id;
+    print(
+        "${shoppingList.id}  ${shoppingList.name} ${shoppingList.userId}  ${shoppingList.items}");
+    final listado = Lists(name: shoppingList.name, userId: userId);
+    await listDoc.set(listado.toMap());
+  }
+}
 
 Future<UserModel> getUserData() async {
   final user = _auth.currentUser;
@@ -39,7 +53,6 @@ Future<UserModel> getUserData() async {
 
     for (final itemDoc in itemDocs.docs) {
       final itemMap = itemDoc.data() as Map<String, dynamic>;
-      print(itemMap.toString());
       final itemId = itemDoc.id; // ID del documento autogenerado
       final item = Item(
         id: itemId,
