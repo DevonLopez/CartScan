@@ -1,5 +1,6 @@
 import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/services/list_service.dart';
+import 'package:cart_scan/services/product_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cart_scan/providers/providers.dart';
@@ -17,6 +18,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var barcode = '';
   bool _isDataFetched = false;
 
@@ -29,6 +31,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
       print('peticion de usuarios con listas base');
       userProvider.getCurrentUserWithLists();
       _isDataFetched = true;
+    }
+  }
+
+  void _performAPICall() async {
+    final response = await fetchProductData(barcode);
+    if (response != null) {
+      print(response.title); // Muestra la respuesta en la consola
+    } else {
+      print(
+          'Error: Respuesta nula'); // Muestra un mensaje de error si la respuesta es nula
     }
   }
 
@@ -85,40 +97,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
     else
       tituloCabecera = "Mis Listas";
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 150, 226, 88),
         title: Text('${tituloCabecera}'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return alert;
-                },
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              openCreateListForm(context);
-            },
-          )
-        ],
       ),
+      endDrawer: const SideMenu(),
       body: _DetailsScreenBody(),
       bottomNavigationBar: CustomNavigationBar(),
-      floatingActionButton: FloatingActionButton(
-        elevation: 2,
-        backgroundColor: Color.fromARGB(255, 150, 226, 88),
-        child: Icon(
-          Icons.filter_center_focus,
-        ),
-        onPressed: () {
-          openBarcodeScanner();
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            elevation: 2,
+            backgroundColor: Color.fromARGB(255, 150, 226, 88),
+            child: Icon(Icons.filter_center_focus),
+            onPressed: openBarcodeScanner,
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -150,13 +146,4 @@ class _DetailsScreenBody extends StatelessWidget {
         return ListScreen();
     }
   }
-}
-
-void openCreateListForm(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return CreateListForm(); // Aquí debes crear y retornar tu formulario de creación de lista
-    },
-  );
 }
