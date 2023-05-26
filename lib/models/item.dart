@@ -1,21 +1,21 @@
 class Item {
   final String id;
-  final String listId;
+  late final String listId;
   final String name;
-  final String description;
+  final String? description;
   final double price;
   final double discount;
-  final int quality;
+  final int? quality;
   final bool offer;
 
   Item({
     required this.id,
     required this.listId,
     required this.name,
-    required this.description,
+    this.description,
     required this.price,
     required this.discount,
-    required this.quality,
+    this.quality,
     required this.offer,
   });
 
@@ -32,12 +32,10 @@ class Item {
 
     if (listId == null ||
         name == null ||
-        description == null ||
         price == null ||
         discount == null ||
-        quality == null ||
         offer == null) {
-      throw Exception("One or more fields are missing or null");
+      throw Exception("One or more required fields are missing or null");
     }
 
     return Item(

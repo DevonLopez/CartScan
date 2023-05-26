@@ -10,18 +10,28 @@ FirebaseAuth _auth = FirebaseAuth.instance;
 
 class ListService {
   static Future<void> createList(ShoppingList shoppingList) async {
+    print('lista creada');
     final listDoc = FirebaseFirestore.instance.collection('lists').doc();
     final user = _auth.currentUser;
-    final userId = user!.uid;
     shoppingList.id = listDoc.id;
-    print(
-        "${shoppingList.id}  ${shoppingList.name} ${shoppingList.userId}  ${shoppingList.items}");
-    final listado = Lists(name: shoppingList.name, userId: userId);
-    await listDoc.set(listado.toMap());
+    shoppingList.userId = user!.uid;
+    await listDoc.set(shoppingList.toMap());
   }
 }
 
+Future<void> addItemToSelectedList(Item newItem, String listId) async {
+  print('addItem');
+  final listDoc = FirebaseFirestore.instance.collection('lists').doc(listId);
+
+  await listDoc.collection('items').add(newItem.toMap());
+
+  // Mostrar una notificación o realizar cualquier acción adicional si es necesario
+
+  // Volver a la pantalla DetailsScreen
+}
+
 Future<UserModel> getUserData() async {
+  print('userData');
   final user = _auth.currentUser;
   if (user == null) {
     throw Exception('User not logged in');
@@ -79,4 +89,15 @@ Future<UserModel> getUserData() async {
   userModel.lists = lists;
 
   return userModel;
+}
+
+Future<void> addUserToCollection(String name) async {
+  print('addUser');
+  final userDoc = FirebaseFirestore.instance
+      .collection('users')
+      .doc(_auth.currentUser!.uid);
+
+  await userDoc.set({
+    'name': name,
+  });
 }

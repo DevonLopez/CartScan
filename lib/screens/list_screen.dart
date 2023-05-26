@@ -19,7 +19,9 @@ class _ListScreenState extends State<ListScreen> {
     super.initState();
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.getCurrentUserWithLists();
+    if (userProvider.currentUser == null) {
+      userProvider.getCurrentUserWithLists();
+    }
   }
 
   @override

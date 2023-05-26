@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/utils.dart';
-import '../widgets/google_button.dart';
 
 class LogInScreen extends StatefulWidget {
   final Function()? onTap;
@@ -24,7 +23,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 150, 226, 88),
+      backgroundColor: Color.fromARGB(255, 124, 190, 69),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -49,6 +48,7 @@ class _LogInScreenState extends State<LogInScreen> {
               children: [
                 const SizedBox(
                   width: 180,
+                  height: 50,
                 ),
                 TextButton(
                   onPressed: () {
@@ -65,42 +65,6 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
             const SizedBox(
               height: 20,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Row(
-                children: const [
-                  Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      'Continuar con',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      thickness: 0.5,
-                      color: Colors.black,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [GoogleButton()],
-            ),
-            const SizedBox(
-              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

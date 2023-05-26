@@ -40,9 +40,6 @@ class UserModel {
     return {
       "id": id,
       "name": name,
-      "lists": lists != null
-          ? List<dynamic>.from(lists!.map((x) => x.toMap()))
-          : null,
     };
   }
 }

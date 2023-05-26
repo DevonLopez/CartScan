@@ -65,6 +65,9 @@ class _CreateListFormState extends State<CreateListForm> {
               );
               ListService.createList(
                   newList); // Guardar la nueva lista en Firebase
+              print('peticion de guardado de lista y busqueda');
+              userProvider.getCurrentUserWithLists();
+
               Navigator.of(context).pop();
             }
           },

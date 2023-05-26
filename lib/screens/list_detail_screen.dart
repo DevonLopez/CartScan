@@ -20,7 +20,7 @@ class ListDetailScreen extends StatelessWidget {
 
           return ListTile(
             title: Text(item.name),
-            subtitle: Text(item.description),
+            subtitle: Text(item.description!),
             trailing: Text('\$${item.price.toStringAsFixed(2)}'),
             onTap: () {
               Navigator.push(

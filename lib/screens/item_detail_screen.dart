@@ -17,7 +17,7 @@ class ItemDetailScreen extends StatelessWidget {
         children: [
           SizedBox(height: 16),
           Text(
-            item.description,
+            item.description!,
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 16),

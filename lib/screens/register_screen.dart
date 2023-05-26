@@ -1,4 +1,6 @@
+import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/login_provider.dart';
+import 'package:cart_scan/services/list_service.dart';
 import 'package:cart_scan/widgets/widgets.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,6 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _email.text.trim(), password: _constrasena.text.trim());
+      addUserToCollection(_name.text);
     } on FirebaseAuthException {
       Utils.showSnackBar(
           "El correo electrónico que has introducido ya está en uso");
@@ -48,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 124, 190, 69),
       body: Form(
         key: _key,
         child: SingleChildScrollView(
@@ -56,13 +60,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(
                 height: 50,
               ),
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.white,
-                child: Image.asset(
-                  'assets/logoCart.png',
-                  fit: BoxFit.cover,
-                ),
+              Image.asset(
+                'assets/logoCart.png',
+                fit: BoxFit.cover,
+                cacheHeight: 200,
+                cacheWidth: 220,
               ),
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -73,22 +75,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               fieldName(),
               const Divider(
-                color: Colors.white,
+                color: Color.fromARGB(0, 255, 255, 255),
               ),
               fieldEmail(),
               const Divider(
-                color: Colors.white,
+                color: Color.fromARGB(0, 255, 255, 255),
               ),
               fieldPassword(context),
               const Divider(
-                color: Colors.white,
+                color: Color.fromARGB(0, 255, 255, 255),
               ),
               MyButton(
                 onTap: signUp,
                 text: "Registrar",
               ),
               const SizedBox(
-                height: 100,
+                height: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

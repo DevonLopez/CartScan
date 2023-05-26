@@ -3,7 +3,7 @@ import 'package:cart_scan/models/models.dart';
 class ShoppingList {
   late String? id;
   final String name;
-  final String userId;
+  late String userId;
   List<Item>? items;
 
   ShoppingList({
@@ -23,9 +23,7 @@ class ShoppingList {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
         "name": name,
         "userId": userId,
-        "items": List<dynamic>.from(items!.map((x) => x.toMap())),
       };
 }
