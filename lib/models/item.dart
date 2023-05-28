@@ -1,6 +1,6 @@
 class Item {
   final String? id;
-  late final String listId;
+  late String? listId;
   final String name;
   final String? description;
   final double price;

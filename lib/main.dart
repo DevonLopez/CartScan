@@ -1,3 +1,4 @@
+import 'package:cart_scan/providers/item_provider.dart';
 import 'package:cart_scan/providers/login_provider.dart';
 import 'package:cart_scan/providers/ui_provider.dart';
 import 'package:cart_scan/providers/user_provider.dart';
@@ -24,6 +25,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ItemFormProvider(),
         )
       ],
       child: MyApp(),

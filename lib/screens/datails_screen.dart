@@ -1,4 +1,5 @@
 import 'package:cart_scan/models/models.dart';
+import 'package:cart_scan/screens/item_screen.dart';
 import 'package:cart_scan/services/list_service.dart';
 import 'package:cart_scan/services/product_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,30 +35,49 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-  void _performAPICall() async {
-    final response = await fetchProductData(barcode);
+  Future<Item?> _performAPICall() async {
+    final response = await fetchProductData(this.barcode);
     if (response != null) {
-      print(response.title); // Muestra la respuesta en la consola
+      print(response);
+      return Item(
+          id: null,
+          listId: null,
+          description: response.description,
+          name: response.title,
+          price: 0.00,
+          discount: 0,
+          offer: false,
+          quality: null);
     } else {
-      print(
-          'Error: Respuesta nula'); // Muestra un mensaje de error si la respuesta es nula
+      print('Error: Respuesta nula');
+      return null; // Muestra un mensaje de error si la respuesta es nula
     }
   }
 
+  void openItemDetails(Item item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ItemScreenForm(itemBarcode: item),
+      ),
+    );
+  }
+
   Future<void> openBarcodeScanner() async {
+    this.barcode = '';
     String barcode = await FlutterBarcodeScanner.scanBarcode(
       '#FF0000', // Color de la barra de escaneo
       'Cancelar', // Texto del botón de cancelar
       false, // Desactivar el flash
-      ScanMode.DEFAULT, // Modo de escaneo predeterminado
+      ScanMode.BARCODE, // Modo de escaneo predeterminado
     );
 
-    // Guardar el barcode obtenido
-    // Aquí puedes hacer lo que necesites con el valor del barcode, como guardarlo en Firebase
-    this.barcode = barcode;
-
-    // Volver a la pantalla DetailsScreen
-    Navigator.of(context).pop();
+    if (barcode != '-1' && barcode.isNotEmpty) {
+      this.barcode = barcode;
+      openItemDetails(_performAPICall() as Item);
+    } else {
+      Navigator.pushNamed(context, 'details');
+    }
   }
 
   @override
