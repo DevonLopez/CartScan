@@ -1,3 +1,4 @@
+import 'package:cart_scan/models/item.dart';
 import 'package:cart_scan/providers/item_provider.dart';
 import 'package:cart_scan/providers/providers.dart';
 import 'package:cart_scan/screens/screens.dart';
@@ -20,7 +21,17 @@ class SideMenu extends StatelessWidget {
 
   void openItemForm(BuildContext context) {
     final provider = Provider.of<ItemFormProvider>(context, listen: false);
+    final item = Item(
+        id: null,
+        listId: null,
+        name: 'Pera',
+        price: 0.71,
+        discount: 0,
+        offer: false,
+        description: 'Buena pera',
+        quality: 8);
     Navigator.pushNamed(context, 'itemForm', arguments: provider.scanned);
+    //Navigator.pushNamed(context, 'itemForm', arguments: item);
   }
 
   @override

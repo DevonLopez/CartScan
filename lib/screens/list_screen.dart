@@ -34,19 +34,39 @@ class _ListScreenState extends State<ListScreen> {
               itemBuilder: (context, index) {
                 final shoppingList = userProvider.currentUser!.lists![index];
 
-                return ListTile(
-                  title: Text(shoppingList.name),
-                  onTap: () {
-                    // Abrir la lista y mostrar los elementos anidados
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ListDetailScreen(
-                          shoppingList: shoppingList,
-                        ),
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        shoppingList.name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: AutofillHints.birthday),
+                        textAlign: TextAlign.left,
                       ),
-                    );
-                  },
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black, width: 1),
+                      ),
+                      minVerticalPadding: 20,
+                      splashColor: Color.fromARGB(255, 125, 248, 166),
+                      trailing: Icon(Icons.arrow_forward_ios),
+                      tileColor: Color.fromARGB(255, 231, 252, 176),
+                      onTap: () {
+                        // Abrir la lista y mostrar los elementos anidados
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListDetailScreen(
+                              shoppingList: shoppingList,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
                 );
               },
             )

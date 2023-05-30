@@ -61,11 +61,11 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<String?> getListId(String name) async {
-    String? idLista = null;
+    String? idLista;
     try {
       _userLists.forEach((element) {
         if (element.name == name) {
-          idLista = element.id!;
+          idLista = element.id;
         }
       });
       notifyListeners();

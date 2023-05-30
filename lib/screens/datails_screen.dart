@@ -127,6 +127,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         title: Text(tituloCabecera),
       ),
       endDrawer: const SideMenu(),
+      backgroundColor: Color.fromRGBO(248, 229, 165, 1),
       body: const _DetailsScreenBody(),
       bottomNavigationBar: const CustomNavigationBar(),
       floatingActionButton: Column(

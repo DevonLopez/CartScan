@@ -26,4 +26,9 @@ class ShoppingList {
         "name": name,
         "userId": userId,
       };
+
+  @override
+  String toString() {
+    return 'ShoppingList(id: $id, name: $name, userId: $userId, items: $items)';
+  }
 }

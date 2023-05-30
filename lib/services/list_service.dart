@@ -1,18 +1,51 @@
+import 'dart:js';
+
+import 'package:cart_scan/providers/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cart_scan/models/models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 FirebaseAuth _auth = FirebaseAuth.instance;
 
 class ListService {
-  static Future<void> createList(ShoppingList shoppingList) async {
-    print('lista creada');
+  static Future<void> createList(
+      BuildContext context, ShoppingList shoppingList) async {
     final listDoc = FirebaseFirestore.instance.collection('lists').doc();
-    final user = _auth.currentUser;
-    shoppingList.id = listDoc.id;
-    shoppingList.userId = user!.uid;
-    await listDoc.set(shoppingList.toMap());
+    final userProvider =
+        Provider.of<UserProvider>(context, listen: false).currentUser!.lists!;
+    print(shoppingList);
+    print(userProvider);
+    bool existe = false;
+    userProvider.forEach((element) {
+      print(element.name);
+      if (element.name == shoppingList.name) {
+        existe = true;
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Esta lista ya existe'),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+        print('lista ya existe ');
+      }
+    });
+    if (!existe) {
+      print('lista insertada ');
+      print(shoppingList.toString());
+      shoppingList.userId = _auth.currentUser!.uid;
+      await listDoc.set(shoppingList.toMap());
+    }
+    existe = false;
   }
 }
 

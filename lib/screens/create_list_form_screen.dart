@@ -30,7 +30,8 @@ class _CreateListFormState extends State<CreateListForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Nombre de la lista'),
+                decoration:
+                    const InputDecoration(labelText: 'Nombre de la lista'),
                 maxLength: 30,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -64,7 +65,7 @@ class _CreateListFormState extends State<CreateListForm> {
                 userId: userId,
               );
               ListService.createList(
-                  newList); // Guardar la nueva lista en Firebase
+                  context, newList); // Guardar la nueva lista en Firebase
               print('peticion de guardado de lista y busqueda');
               userProvider.getCurrentUserWithLists();
 

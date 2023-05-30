@@ -1,6 +1,7 @@
 import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/item_provider.dart';
@@ -61,26 +62,57 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                   decoration: const InputDecoration(labelText: 'Nombre'),
                   initialValue: widget.itemBarcode!.name ?? '',
                   onChanged: (value) {
+                    itemFormProvider.scanned.name = value;
                     name = value;
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Añade un nombre de producto';
                     }
+                    if (value.length < 4) {
+                      return 'El nombre debe tener al menos 4 caracteres';
+                    }
+                    if (value.length > 30) {
+                      return 'El nombre no puede tener más de 30 caracteres';
+                    }
+
                     return null;
                   },
+                  maxLength: 30,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Descripción'),
+                  initialValue: widget.itemBarcode!.description ?? '',
                   onChanged: (value) {
                     description = value;
+                    itemFormProvider.scanned.description = description!;
                   },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Añade una descripción breve de producto';
+                    }
+                    if (value.length < 4) {
+                      return 'La descripción requiere un mínimo de 4 caracteres';
+                    }
+                    if (value.length > 200) {
+                      return 'La descripción no puede tener más de 200 caracteres';
+                    }
+                    return null;
+                  },
+                  maxLength: 200,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Precio'),
+                  initialValue: widget.itemBarcode!.price.toString() ?? '0.00',
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    price = double.parse(value);
+                    try {
+                      price = double.parse(value);
+                      itemFormProvider.scanned.price = price;
+                    } catch (e) {
+                      print('Error $e');
+                    }
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -91,10 +123,25 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Descuento'),
+                  initialValue: widget.itemBarcode!.discount.toString() ?? '0',
                   keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   enabled: itemFormProvider.offer,
                   onChanged: (value) {
-                    discount = double.parse(value);
+                    try {
+                      double parsedValue = double.parse(value);
+                      if (parsedValue > 100) {
+                        setState(() {
+                          discount = 100;
+                          itemFormProvider.scanned.discount = discount;
+                        });
+                      } else {
+                        discount = parsedValue;
+                        itemFormProvider.scanned.discount = parsedValue;
+                      }
+                    } catch (e) {
+                      print('Error: $e');
+                    }
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -105,9 +152,24 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Valoración'),
+                  initialValue: widget.itemBarcode!.quality.toString() ?? '5',
                   keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
-                    quality = int.parse(value);
+                    try {
+                      int parsedValue = int.parse(value);
+                      if (parsedValue > 10) {
+                        setState(() {
+                          quality = 10;
+                          itemFormProvider.scanned.quality = quality;
+                        });
+                      } else {
+                        quality = parsedValue;
+                        itemFormProvider.scanned.quality = parsedValue;
+                      }
+                    } catch (e) {
+                      print('Error $e');
+                    }
                   },
                 ),
                 SwitchListTile(
@@ -116,15 +178,18 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                   onChanged: (value) {
                     setState(() {
                       itemFormProvider.offer = value;
+                      itemFormProvider.scanned.offer = itemFormProvider.offer;
                     });
                   },
                 ),
                 DropdownButton<String>(
                   value: selectedListName,
-                  onChanged: (value) {
+                  onChanged: (value) async {
                     setState(() {
                       selectedListName = value!;
                     });
+                    String? listaa = await userProvider.getListId(value!);
+                    itemFormProvider.scanned.listId = listaa;
                   },
                   items: userLists.map((list) {
                     return DropdownMenuItem<String>(
@@ -155,15 +220,13 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                   if (formKey.currentState!.validate()) {
                     Item item = Item(
                       id: null,
-                      listId: userProvider
-                              .getListId(selectedListName!)
-                              .toString() ??
-                          '',
-                      name: name,
-                      price: price,
-                      discount: discount,
-                      quality: quality,
-                      offer: offer,
+                      listId: itemFormProvider.scanned.listId,
+                      description: itemFormProvider.scanned.description,
+                      name: itemFormProvider.scanned.name,
+                      price: itemFormProvider.scanned.price,
+                      discount: itemFormProvider.scanned.discount,
+                      quality: itemFormProvider.scanned.quality,
+                      offer: itemFormProvider.scanned.offer,
                     );
                     print(item.toString());
                     Navigator.of(context).pop();
@@ -187,8 +250,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                 ElevatedButton(
                   child: const Text('Aceptar'),
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, 'details');
                   },
                 ),
               ],
