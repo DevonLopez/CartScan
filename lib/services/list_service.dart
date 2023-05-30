@@ -1,9 +1,6 @@
-import 'package:cart_scan/providers/providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cart_scan/models/models.dart';
-import 'package:provider/provider.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -52,7 +49,7 @@ Future<UserModel> getUserData() async {
   final lists = <ShoppingList>[];
 
   for (final doc in listDocs.docs) {
-    final listMap = doc.data() as Map<String, dynamic>;
+    final listMap = doc.data();
     final listId = doc.id;
     final listName = listMap['name'];
 
@@ -62,7 +59,7 @@ Future<UserModel> getUserData() async {
     final items = <Item>[];
 
     for (final itemDoc in itemDocs.docs) {
-      final itemMap = itemDoc.data() as Map<String, dynamic>;
+      final itemMap = itemDoc.data();
       final itemId = itemDoc.id; // ID del documento autogenerado
       final item = Item(
         id: itemId,

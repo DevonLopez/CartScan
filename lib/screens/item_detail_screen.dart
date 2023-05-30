@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ItemDetailScreen extends StatelessWidget {
   final Item item;
 
-  const ItemDetailScreen({required this.item});
+  const ItemDetailScreen({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +13,20 @@ class ItemDetailScreen extends StatelessWidget {
         title: Text(item.name),
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             item.description!,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '\€${(item.price * (1 - item.discount / 100)).toStringAsFixed(2)}',
-                style: TextStyle(
+                '€${(item.price * (1 - item.discount / 100)).toStringAsFixed(2)}',
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -37,14 +37,14 @@ class ItemDetailScreen extends StatelessWidget {
                   children: [
                     Text(
                       '${item.discount.toInt()}% OFF',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.red,
                       ),
                     ),
                     Text(
-                      '\€${item.price.toStringAsFixed(2)}',
-                      style: TextStyle(
+                      '€${item.price.toStringAsFixed(2)}',
+                      style: const TextStyle(
                         fontSize: 16,
                         decoration: TextDecoration.lineThrough,
                         color: Colors.red,
@@ -54,10 +54,10 @@ class ItemDetailScreen extends StatelessWidget {
                 ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'Valoración: ${item.quality}',
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ],
       ),

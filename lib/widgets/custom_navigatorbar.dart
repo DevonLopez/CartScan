@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomNavigationBar extends StatelessWidget {
+  const CustomNavigationBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UIProvider>(context);
@@ -10,10 +12,10 @@ class CustomNavigationBar extends StatelessWidget {
 
     return BottomNavigationBar(
       onTap: (int i) => uiProvider.menuOpt = i,
-      backgroundColor: Color.fromARGB(255, 150, 226, 88),
+      backgroundColor: const Color.fromARGB(255, 150, 226, 88),
       elevation: 0,
       currentIndex: currentIndex,
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.list),
           label: 'Listas',

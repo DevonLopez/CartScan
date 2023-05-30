@@ -30,7 +30,7 @@ void main() async {
           create: (_) => ItemFormProvider(),
         )
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: 'CartScan',
       theme: ThemeData(
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 243, 11, 11)),
+            ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 243, 11, 11)),
         useMaterial3: true,
       ),
       initialRoute: 'home',

@@ -21,8 +21,8 @@ class _CreateListFormState extends State<CreateListForm> {
     final userId = userProvider.currentUser?.id ?? '';
 
     return AlertDialog(
-      title: Text('Crear lista'),
-      content: Container(
+      title: const Text('Crear lista'),
+      content: SizedBox(
         width: 200,
         child: Form(
           key: _formKey,
@@ -30,7 +30,7 @@ class _CreateListFormState extends State<CreateListForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Nombre de la lista'),
+                decoration: const InputDecoration(labelText: 'Nombre de la lista'),
                 maxLength: 30,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -48,13 +48,13 @@ class _CreateListFormState extends State<CreateListForm> {
       ),
       actions: [
         TextButton(
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text('Guardar'),
+          child: const Text('Guardar'),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();

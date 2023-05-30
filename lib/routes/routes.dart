@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/screens/item_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +11,11 @@ var customRoutes = <String, WidgetBuilder>{
   'details': (context) => const DetailsScreen(),
   'scan': (context) => const ScanScreen(),
   'list': (context) => const ListScreen(),
-  'search': (context) => const SearchScreen(),
+  'search': (context) => SearchScreen(),
   'compare': (context) => const CompareScreen(),
+  'itemForm': (context) {
+    final Item? itemBarcode =
+        ModalRoute.of(context)?.settings.arguments as Item?;
+    return ItemScreenForm(itemBarcode: itemBarcode);
+  },
 };

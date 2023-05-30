@@ -1,4 +1,3 @@
-import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/login_provider.dart';
 import 'package:cart_scan/services/list_service.dart';
 import 'package:cart_scan/widgets/widgets.dart';
@@ -51,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 124, 190, 69),
+      backgroundColor: const Color.fromARGB(255, 124, 190, 69),
       body: Form(
         key: _key,
         child: SingleChildScrollView(

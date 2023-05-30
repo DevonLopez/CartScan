@@ -1,6 +1,6 @@
 import 'package:cart_scan/models/models.dart';
+import 'package:cart_scan/providers/item_provider.dart';
 import 'package:cart_scan/screens/item_screen.dart';
-import 'package:cart_scan/services/list_service.dart';
 import 'package:cart_scan/services/product_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<Item?> _performAPICall() async {
-    final response = await fetchProductData(this.barcode);
+    final response = await fetchProductData(barcode);
     if (response != null) {
       print(response);
       return Item(
@@ -74,7 +74,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     if (barcode != '-1' && barcode.isNotEmpty) {
       this.barcode = barcode;
-      openItemDetails(_performAPICall() as Item);
+      final provider = Provider.of<ItemFormProvider>(context, listen: false);
+      provider.barcode = this.barcode;
+      provider.scanned = _performAPICall() as Item;
+      openItemDetails(provider.scanned);
     } else {
       Navigator.pushNamed(context, 'details');
     }
@@ -83,13 +86,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget cancelButton = TextButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Continue"),
+      child: const Text("Continue"),
       onPressed: () async {
         await GoogleSignIn().signOut();
         FirebaseAuth.instance.signOut();
@@ -97,8 +100,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text("Cerrar Sesión"),
-      content: Text("Estas seguro que quieres cerrar sesión?"),
+      title: const Text("Cerrar Sesión"),
+      content: const Text("Estas seguro que quieres cerrar sesión?"),
       actions: [
         cancelButton,
         continueButton,
@@ -107,32 +110,33 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final uiProvider = Provider.of<UIProvider>(context);
 
     final currentIndex = uiProvider.menuOpt;
-    var tituloCabecera;
-    if (currentIndex == 0)
+    String tituloCabecera;
+    if (currentIndex == 0) {
       tituloCabecera = "Mis Listas";
-    else if (currentIndex == 1)
+    } else if (currentIndex == 1) {
       tituloCabecera = "Comparaciones";
-    else if (currentIndex == 2)
+    } else if (currentIndex == 2) {
       tituloCabecera = "Buscar artículos";
-    else
+    } else {
       tituloCabecera = "Mis Listas";
+    }
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 150, 226, 88),
-        title: Text('${tituloCabecera}'),
+        backgroundColor: const Color.fromARGB(255, 150, 226, 88),
+        title: Text(tituloCabecera),
       ),
       endDrawer: const SideMenu(),
-      body: _DetailsScreenBody(),
-      bottomNavigationBar: CustomNavigationBar(),
+      body: const _DetailsScreenBody(),
+      bottomNavigationBar: const CustomNavigationBar(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             elevation: 2,
-            backgroundColor: Color.fromARGB(255, 150, 226, 88),
-            child: Icon(Icons.filter_center_focus),
+            backgroundColor: const Color.fromARGB(255, 150, 226, 88),
             onPressed: openBarcodeScanner,
+            child: const Icon(Icons.filter_center_focus),
           ),
         ],
       ),
@@ -154,16 +158,16 @@ class _DetailsScreenBody extends StatelessWidget {
 
     switch (currentIndex) {
       case 0:
-        return ListScreen();
+        return const ListScreen();
 
       case 1:
-        return CompareScreen();
+        return const CompareScreen();
 
       case 2:
         return SearchScreen();
 
       default:
-        return ListScreen();
+        return const ListScreen();
     }
   }
 }

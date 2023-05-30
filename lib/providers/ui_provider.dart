@@ -4,11 +4,11 @@ class UIProvider extends ChangeNotifier {
   int _menuOpt = 0;
 
   int get menuOpt {
-    return this._menuOpt;
+    return _menuOpt;
   }
 
   set menuOpt(int index) {
-    this._menuOpt = index;
+    _menuOpt = index;
     notifyListeners();
   }
 }

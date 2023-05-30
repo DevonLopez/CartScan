@@ -43,4 +43,5 @@ Future<Product?> fetchProductData(String barcode) async {
       throw Exception('Failed to fetch product data');
     }
   }
+  return null;
 }

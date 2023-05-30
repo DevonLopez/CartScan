@@ -1,4 +1,3 @@
-import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/item_provider.dart';
 import 'package:cart_scan/providers/providers.dart';
 import 'package:cart_scan/screens/screens.dart';
@@ -14,13 +13,14 @@ class SideMenu extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CreateListForm(); // Aquí debes crear y retornar tu formulario de creación de lista
+        return const CreateListForm();
       },
     );
   }
 
   void openItemForm(BuildContext context) {
-    Navigator.pushNamed(context, 'itemForm');
+    final provider = Provider.of<ItemFormProvider>(context, listen: false);
+    Navigator.pushNamed(context, 'itemForm', arguments: provider.scanned);
   }
 
   @override
@@ -29,19 +29,19 @@ class SideMenu extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           ListTile(
-            leading: Icon(Icons.add),
-            title: Text('Crear Lista'),
+            leading: const Icon(Icons.add),
+            title: const Text('Crear Lista'),
             onTap: () {
               openCreateListForm(context);
             },
           ),
           ListTile(
-            leading: Icon(Icons.shop),
-            title: Text('Añadir Item'),
+            leading: const Icon(Icons.shop),
+            title: const Text('Añadir Item'),
             onTap: () {
               final user = Provider.of<UserProvider>(context, listen: false);
               user.fetchUserLists(user.currentUser!.id);
@@ -51,25 +51,25 @@ class SideMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Cerrar Sesión'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Cerrar Sesión'),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Cerrar Sesión"),
-                    content:
-                        Text("¿Estás seguro de que quieres cerrar sesión?"),
+                    title: const Text("Cerrar Sesión"),
+                    content: const Text(
+                        "¿Estás seguro de que quieres cerrar sesión?"),
                     actions: [
                       TextButton(
-                        child: Text("Cancelar"),
+                        child: const Text("Cancelar"),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                       ),
                       TextButton(
-                        child: Text("Aceptar"),
+                        child: const Text("Aceptar"),
                         onPressed: () async {
                           await GoogleSignIn().signOut();
                           FirebaseAuth.instance.signOut();

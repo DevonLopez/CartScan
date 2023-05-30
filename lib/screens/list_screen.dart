@@ -1,4 +1,3 @@
-import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/user_provider.dart';
 import 'package:cart_scan/screens/screens.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +50,7 @@ class _ListScreenState extends State<ListScreen> {
                 );
               },
             )
-          : CircularProgressIndicator(),
+          : const CircularProgressIndicator(),
     );
   }
 }
