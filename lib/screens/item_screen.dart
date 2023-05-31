@@ -188,8 +188,9 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     setState(() {
                       selectedListName = value!;
                     });
-                    String? listaa = await userProvider.getListId(value!);
-                    itemFormProvider.scanned.listId = listaa;
+                    print(value);
+                    await userProvider.getListId(value!);
+                    itemFormProvider.scanned.listId = userProvider.listId;
                   },
                   items: userLists.map((list) {
                     return DropdownMenuItem<String>(

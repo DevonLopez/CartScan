@@ -1,11 +1,10 @@
-import 'dart:js_interop';
-
 import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/services/list_service.dart';
 import 'package:flutter/foundation.dart';
 
 class UserProvider with ChangeNotifier {
   UserModel? _currentUser;
+  String? _listId = '';
   List<ShoppingList> _userLists = [];
   List<String> _nameList = [];
   List<Item> _itemList = [];
@@ -14,6 +13,7 @@ class UserProvider with ChangeNotifier {
   List<ShoppingList> get userLists => _userLists;
   List<String> get nameList => _nameList;
   List<Item> get itemList => _itemList;
+  String? get listId => _listId;
 
   Future<void> getCurrentUserWithLists() async {
     try {
@@ -29,7 +29,7 @@ class UserProvider with ChangeNotifier {
     _itemList = [];
     _currentUser!.lists!.forEach((element) {
       element.items!.forEach((item) {
-        if (item.isDefinedAndNotNull) {
+        if (item != null) {
           _itemList.add(item);
         }
       });
@@ -60,20 +60,20 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> getListId(String name) async {
-    String? idLista;
+  Future<void> getListId(String name) async {
     try {
-      _userLists.forEach((element) {
+      print(_userLists);
+      _currentUser!.lists!.forEach((element) {
+        print('Id lista: ' + element.id!);
+        print('iD: ' + listId!);
+
         if (element.name == name) {
-          idLista = element.id;
+          _listId = element.id;
         }
       });
       notifyListeners();
-      return idLista;
     } catch (error) {
       print('No encontrada la lista: $error');
     }
-    notifyListeners();
-    return null;
   }
 }
