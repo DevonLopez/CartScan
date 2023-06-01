@@ -13,35 +13,28 @@ Future<Product?> fetchProductData(String barcode) async {
 
   if (response.statusCode == 200) {
     final dynamic jsonResponse = json.decode(response.body);
-    print(response.body);
 
-    if (response.statusCode == 200) {
-      final dynamic jsonResponse = json.decode(response.body);
-      print(response.body);
+    if (jsonResponse != null) {
+      final dynamic productData = jsonResponse['product'];
 
-      if (jsonResponse != null) {
-        final dynamic productData = jsonResponse['product'];
-
-        if (productData is List) {
-          // Manejar el caso de una lista de productos
-          if (productData.isNotEmpty) {
-            final jsonMap = productData.first;
-            return Product.fromJson(jsonMap);
-          } else {
-            throw Exception('Empty product list');
-          }
-        } else if (productData is Map<String, dynamic>) {
-          // Manejar el caso de un solo producto
-          return Product.fromJson(productData);
+      if (productData is List) {
+        // Manejar el caso de una lista de productos
+        if (productData.isNotEmpty) {
+          final jsonMap = productData.first;
+          return Product.fromJson(jsonMap);
         } else {
-          throw Exception('Invalid product data');
+          throw Exception('Empty product list');
         }
+      } else if (productData is Map<String, dynamic>) {
+        // Manejar el caso de un solo producto
+        return Product.fromJson(productData);
       } else {
-        throw Exception('Invalid response');
+        throw Exception('Invalid product data');
       }
     } else {
-      throw Exception('Failed to fetch product data');
+      throw Exception('Invalid response');
     }
+  } else {
+    throw Exception('Failed to fetch product data');
   }
-  return null;
 }

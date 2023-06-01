@@ -21,7 +21,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var barcode = '';
+  var barcodes = '';
 
   @override
   void didChangeDependencies() {
@@ -35,14 +35,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-  Future<Item?> _performAPICall() async {
-    final response = await fetchProductData(barcode);
+  Future<Item> _performAPICall() async {
+    final response = await fetchProductData(barcodes);
+    print(response);
     if (response != null) {
-      print(response);
+      print(response.title);
+      print(response.description);
       return Item(
           id: null,
           listId: null,
-          description: response.description,
+          description: response.description ?? '',
           name: response.title,
           price: 0.00,
           discount: 0,
@@ -50,7 +52,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
           quality: null);
     } else {
       print('Error: Respuesta nula');
-      return null; // Muestra un mensaje de error si la respuesta es nula
+      return Item(
+          id: null,
+          listId: null,
+          name: '',
+          description: '',
+          price: 0.00,
+          discount: 0,
+          offer: false); // Muestra un mensaje de error si la respuesta es nula
     }
   }
 
@@ -64,20 +73,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<void> openBarcodeScanner() async {
-    this.barcode = '';
+    this.barcodes = '';
     String barcode = await FlutterBarcodeScanner.scanBarcode(
       '#FF0000', // Color de la barra de escaneo
       'Cancelar', // Texto del botón de cancelar
       false, // Desactivar el flash
       ScanMode.BARCODE, // Modo de escaneo predeterminado
     );
+    print('Codigo de barras: ${barcode}');
 
     if (barcode != '-1' && barcode.isNotEmpty) {
-      this.barcode = barcode;
+      this.barcodes = barcode;
       final provider = Provider.of<ItemFormProvider>(context, listen: false);
-      provider.barcode = this.barcode;
-      provider.scanned = _performAPICall() as Item;
-      openItemDetails(provider.scanned);
+      provider.barcode = this.barcodes;
+
+      // Llamar a la API y obtener la respuesta
+      Item responseItem = await _performAPICall();
+
+      // Crear un nuevo Item con los datos de la respuesta o valores por defecto
+
+      print(this.barcodes);
+      print(responseItem.toString());
+      openItemDetails(responseItem);
     } else {
       Navigator.pushNamed(context, 'details');
     }
