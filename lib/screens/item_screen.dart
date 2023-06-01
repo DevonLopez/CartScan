@@ -1,5 +1,6 @@
 import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/user_provider.dart';
+import 'package:cart_scan/services/list_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -188,7 +189,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     setState(() {
                       selectedListName = value!;
                     });
-                    print(value);
                     await userProvider.getListId(value!);
                     itemFormProvider.scanned.listId = userProvider.listId;
                   },
@@ -230,6 +230,8 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                       offer: itemFormProvider.scanned.offer,
                     );
                     print(item.toString());
+                    addItemToSelectedList(item);
+                    userProvider.getCurrentUserWithLists();
                     Navigator.of(context).pop();
                   }
                 },

@@ -7,13 +7,11 @@ class ShoppingList {
   List<Item>? items;
 
   ShoppingList({
-    this.id,
+    required this.id,
     required this.name,
     required this.userId,
     this.items,
-  }) {
-    id = ''; // Valor predeterminado en caso de que el valor de `id` sea nulo
-  }
+  }) {}
 
   factory ShoppingList.fromMap(Map<String, dynamic> json) => ShoppingList(
         id: json["id"] ?? '',

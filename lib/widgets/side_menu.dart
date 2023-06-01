@@ -21,15 +21,7 @@ class SideMenu extends StatelessWidget {
 
   void openItemForm(BuildContext context) {
     final provider = Provider.of<ItemFormProvider>(context, listen: false);
-    final item = Item(
-        id: null,
-        listId: null,
-        name: 'Pera',
-        price: 0.71,
-        discount: 0,
-        offer: false,
-        description: 'Buena pera',
-        quality: 8);
+
     Navigator.pushNamed(context, 'itemForm', arguments: provider.scanned);
     //Navigator.pushNamed(context, 'itemForm', arguments: item);
   }
@@ -55,10 +47,31 @@ class SideMenu extends StatelessWidget {
             title: const Text('Añadir Item'),
             onTap: () {
               final user = Provider.of<UserProvider>(context, listen: false);
-              user.fetchUserLists(user.currentUser!.id);
-              openItemForm(
-                context,
-              );
+              if (user.currentUser!.lists!.length != 0) {
+                user.fetchUserLists(user.currentUser!.id);
+                openItemForm(
+                  context,
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("No tiene listas creadas"),
+                      content:
+                          const Text("Añada un lista para agregar productos"),
+                      actions: [
+                        TextButton(
+                          child: const Text("Aceptar"),
+                          onPressed: () async {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
             },
           ),
           ListTile(

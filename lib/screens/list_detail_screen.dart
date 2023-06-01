@@ -2,21 +2,26 @@ import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/screens/screens.dart';
 import 'package:flutter/material.dart';
 
-class ListDetailScreen extends StatelessWidget {
+class ListDetailScreen extends StatefulWidget {
   final ShoppingList shoppingList;
 
   const ListDetailScreen({super.key, required this.shoppingList});
 
   @override
+  State<ListDetailScreen> createState() => _ListDetailScreenState();
+}
+
+class _ListDetailScreenState extends State<ListDetailScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(shoppingList.name),
+        title: Text(widget.shoppingList.name),
       ),
       body: ListView.builder(
-        itemCount: shoppingList.items!.length,
+        itemCount: widget.shoppingList.items!.length,
         itemBuilder: (context, index) {
-          final item = shoppingList.items![index];
+          final item = widget.shoppingList.items![index];
 
           return ListTile(
             title: Text(item.name),

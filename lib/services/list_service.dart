@@ -47,15 +47,34 @@ class ListService {
   }
 }
 
-Future<void> addItemToSelectedList(Item newItem, String listId) async {
+Future<void> removeListWithItems(String listId) async {
+  final listDoc = db.collection('lists').doc(listId);
+
+  listDoc.delete();
+
+  db.runTransaction((transaction) async {
+    CollectionReference itemsRef = db.collection('items');
+
+    // Realizar una consulta para obtener los documentos que tienen el mismo listId
+    QuerySnapshot querySnapshot =
+        await itemsRef.where('listId', isEqualTo: listId).get();
+
+    // Eliminar los documentos encontrados
+    for (DocumentSnapshot document in querySnapshot.docs) {
+      transaction.delete(document.reference);
+    }
+  }).then((value) {
+    print('Documentos eliminados exitosamente.');
+  }).catchError((error) {
+    print('Error al eliminar documentos: $error');
+  });
+}
+
+Future<void> addItemToSelectedList(Item newItem) async {
   print('addItem');
-  final listDoc = FirebaseFirestore.instance.collection('lists').doc(listId);
+  final itemDoc = db.collection('items');
 
-  await listDoc.collection('items').add(newItem.toMap());
-
-  // Mostrar una notificación o realizar cualquier acción adicional si es necesario
-
-  // Volver a la pantalla DetailsScreen
+  await itemDoc.add(newItem.toMap());
 }
 
 Future<UserModel> getUserData() async {

@@ -8,12 +8,20 @@ class UserProvider with ChangeNotifier {
   List<ShoppingList> _userLists = [];
   List<String> _nameList = [];
   List<Item> _itemList = [];
+  ShoppingList? _currentList;
+  bool _isDataFetch = false;
 
   UserModel? get currentUser => _currentUser;
   List<ShoppingList> get userLists => _userLists;
   List<String> get nameList => _nameList;
   List<Item> get itemList => _itemList;
   String? get listId => _listId;
+  ShoppingList? get currentList => _currentList;
+  bool get isDataFetch => _isDataFetch;
+
+  set isDataFetch(bool valor) {
+    _isDataFetch = valor;
+  }
 
   Future<void> getCurrentUserWithLists() async {
     try {
@@ -34,6 +42,7 @@ class UserProvider with ChangeNotifier {
         }
       });
     });
+    notifyListeners();
   }
 
   Future<void> fetchUserLists(String userId) async {
@@ -62,11 +71,7 @@ class UserProvider with ChangeNotifier {
 
   Future<void> getListId(String name) async {
     try {
-      print(_userLists);
-      _currentUser!.lists!.forEach((element) {
-        print('Id lista: ' + element.id!);
-        print('iD: ' + listId!);
-
+      _userLists!.forEach((element) {
         if (element.name == name) {
           _listId = element.id;
         }

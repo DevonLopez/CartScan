@@ -2,6 +2,7 @@ import 'package:cart_scan/models/models.dart';
 import 'package:cart_scan/providers/item_provider.dart';
 import 'package:cart_scan/screens/item_screen.dart';
 import 'package:cart_scan/services/product_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cart_scan/providers/providers.dart';
@@ -21,17 +22,16 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var barcode = '';
-  bool _isDataFetched = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final userProvider = Provider.of<UserProvider>(context);
 
-    if (!_isDataFetched) {
+    if (!userProvider.isDataFetch) {
       print('peticion de usuarios con listas base');
       userProvider.getCurrentUserWithLists();
-      _isDataFetched = true;
+      userProvider.isDataFetch = true;
     }
   }
 

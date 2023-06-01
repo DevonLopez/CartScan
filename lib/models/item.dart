@@ -52,7 +52,6 @@ class Item {
 
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
       "listId": listId,
       "name": name,
       "description": description,
