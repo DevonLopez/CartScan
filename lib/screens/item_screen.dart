@@ -33,6 +33,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     String id = '';
     String name = '';
@@ -52,8 +53,8 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
           title: const Text('Añadir Producto'),
         ),
         body: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          padding: const EdgeInsets.all(16.0),
+          width: size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 0),
           child: Form(
             key: formKey,
             child: Column(
@@ -105,8 +106,11 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Precio'),
                   initialValue: widget.itemBarcode!.price.toString() ?? '0.00',
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
                     try {
                       price = double.parse(value);
@@ -119,14 +123,20 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     if (value!.isEmpty) {
                       return 'Añade un precio';
                     }
+                    if (value.endsWith('.')) {
+                      return 'Completa el precio';
+                    }
                     return null;
                   },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Descuento'),
                   initialValue: widget.itemBarcode!.discount.toString() ?? '0',
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+\.?\d{0,2}')),
+                  ],
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   enabled: itemFormProvider.offer,
                   onChanged: (value) {
                     try {
@@ -147,6 +157,9 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Añade un descuento';
+                    }
+                    if (value.endsWith('.')) {
+                      return 'Completa el descuento';
                     }
                     return null;
                   },
@@ -221,7 +234,8 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                   if (formKey.currentState!.validate()) {
                     Item item = Item(
                       id: null,
-                      listId: itemFormProvider.scanned.listId,
+                      listId: itemFormProvider.scanned.listId ??
+                          userProvider!.userLists!.first!.id,
                       description: itemFormProvider.scanned.description,
                       name: itemFormProvider.scanned.name,
                       price: itemFormProvider.scanned.price,
@@ -232,7 +246,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     print(item.toString());
                     addItemToSelectedList(item);
                     userProvider.getCurrentUserWithLists();
-
                     Navigator.of(context).pop();
                   }
                 },
@@ -243,25 +256,8 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
       );
     } else {
       // Si itemBarcode no está definido o es nulo, muestra una alerta y navega a la pantalla de detalles
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content: const Text('No se encontraron listas disponibles.'),
-              actions: [
-                ElevatedButton(
-                  child: const Text('Aceptar'),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'details');
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      });
+
+      Navigator.pushNamed(context, 'details');
 
       return Scaffold(
         appBar: AppBar(

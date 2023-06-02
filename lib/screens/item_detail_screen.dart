@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 class ItemDetailScreen extends StatelessWidget {
   final Item item;
 
-  const ItemDetailScreen({super.key, required this.item});
+  const ItemDetailScreen({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(item.name),
@@ -58,6 +59,13 @@ class ItemDetailScreen extends StatelessWidget {
           Text(
             'Valoración: ${item.quality}',
             style: const TextStyle(fontSize: 16),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'itemForm', arguments: item);
+            },
+            child: const Text('Actualizar'),
           ),
         ],
       ),
