@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ItemFormProvider extends ChangeNotifier {
   bool _offer = false;
   String _barcode = '';
-  Item _scanned = Item(
+  Item? _scanned = Item(
       id: null,
       listId: null,
       name: '',
@@ -16,7 +16,7 @@ class ItemFormProvider extends ChangeNotifier {
 
   bool get offer => _offer;
   String get barcode => _barcode;
-  Item get scanned => _scanned;
+  Item get scanned => _scanned!;
 
   set offer(bool value) {
     _offer = value;

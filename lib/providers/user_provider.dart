@@ -34,10 +34,9 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> getItems() async {
-    _itemList = [];
-    _currentUser!.lists!.forEach((element) {
+    _userLists.forEach((element) {
       element.items!.forEach((item) {
-        if (item != null) {
+        if (!_itemList.contains(item)) {
           _itemList.add(item);
         }
       });

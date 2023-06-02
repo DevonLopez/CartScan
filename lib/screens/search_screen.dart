@@ -11,15 +11,19 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   String searchQuery = '';
-  late List<Item> userItems;
+  List<Item> userItems = [];
 
   @override
   void initState() {
     super.initState();
-    userItems = [];
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.getItems();
-    userItems = userProvider.itemList;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.getItems().then((_) {
+        setState(() {
+          userItems = userProvider.itemList;
+        });
+      });
+    });
   }
 
   @override

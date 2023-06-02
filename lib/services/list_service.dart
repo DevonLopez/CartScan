@@ -70,6 +70,12 @@ Future<void> removeListWithItems(String listId) async {
   });
 }
 
+Future<void> removeItem(String itemId) async {
+  final itemsRef = db.collection('items').doc(itemId);
+
+  itemsRef.delete();
+}
+
 Future<void> addItemToSelectedList(Item newItem) async {
   print('addItem');
   final itemDoc = db.collection('items');

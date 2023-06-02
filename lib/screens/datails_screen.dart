@@ -24,10 +24,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
   var barcode = '';
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // Perform your state update here
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.getItems();
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final userProvider = Provider.of<UserProvider>(context);
-
     if (!userProvider.isDataFetch) {
       print('peticion de usuarios con listas base');
       userProvider.getCurrentUserWithLists();
@@ -35,22 +45,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-  Future<Item?> _performAPICall() async {
-    final response = await fetchProductData(barcode);
+  Future<void> _performAPICall() async {
+    Product? response = await fetchProductData(barcode);
+    final items = Provider.of<ItemFormProvider>(context, listen: false);
+    print(response);
     if (response != null) {
-      print(response);
-      return Item(
-          id: null,
-          listId: null,
-          description: response.description,
-          name: response.title,
-          price: 0.00,
-          discount: 0,
-          offer: false,
-          quality: null);
+      String descript = response.description;
+      String name = response.title;
+      items.scanned.description = descript;
+      items.scanned.name = name;
+      openItemDetails(items.scanned);
+      print(items.scanned.toString());
     } else {
       print('Error: Respuesta nula');
-      return null; // Muestra un mensaje de error si la respuesta es nula
+      openItemDetails(items.scanned);
     }
   }
 
@@ -69,15 +77,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
       '#FF0000', // Color de la barra de escaneo
       'Cancelar', // Texto del botón de cancelar
       false, // Desactivar el flash
-      ScanMode.BARCODE, // Modo de escaneo predeterminado
+      ScanMode.DEFAULT, // Modo de escaneo predeterminado
     );
+    //this.barcode = "5449000000996";
+    //this.barcode = "5060639121915";
+
+    print('Barcode: ' + barcode);
 
     if (barcode != '-1' && barcode.isNotEmpty) {
       this.barcode = barcode;
       final provider = Provider.of<ItemFormProvider>(context, listen: false);
       provider.barcode = this.barcode;
-      provider.scanned = _performAPICall() as Item;
-      openItemDetails(provider.scanned);
+      _performAPICall();
     } else {
       Navigator.pushNamed(context, 'details');
     }

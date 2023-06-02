@@ -1,16 +1,16 @@
 class Product {
   final dynamic artist;
-  final List<dynamic> attributes;
+  final dynamic attributes;
   final dynamic author;
-  final Map<String, dynamic> barcodeFormats;
+  final dynamic barcodeFormats;
   final dynamic brand;
   final dynamic category;
-  final dynamic description;
-  final List<dynamic> features;
-  final List<String> images;
+  final String description;
+  final dynamic features;
+  final dynamic images;
   final dynamic ingredients;
   final dynamic manufacturer;
-  final List<OnlineStore> onlineStores;
+  final dynamic onlineStores;
   final String title;
 
   Product({
@@ -32,40 +32,59 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       artist: json['artist'],
-      attributes: List<dynamic>.from(json['attributes']),
+      attributes: json['attributes'],
       author: json['author'],
-      barcodeFormats: json['barcode_formats'],
+      barcodeFormats: json['barcodeFormats'],
       brand: json['brand'],
       category: json['category'],
       description: json['description'],
-      features: List<dynamic>.from(json['features']),
-      images: List<String>.from(json['images']),
+      features: json['features'],
+      images: json['images'],
       ingredients: json['ingredients'],
       manufacturer: json['manufacturer'],
-      onlineStores: List<OnlineStore>.from(
-        json['online_stores'].map((x) => OnlineStore.fromJson(x)),
-      ),
+      onlineStores: json['onlineStores'],
       title: json['title'],
     );
   }
-}
 
-class OnlineStore {
-  final String name;
-  final String price;
-  final String url;
+  Map<String, dynamic> toMap() {
+    return {
+      'artist': artist,
+      'attributes': attributes,
+      'author': author,
+      'barcodeFormats': barcodeFormats,
+      'brand': brand,
+      'category': category,
+      'description': description,
+      'features': features,
+      'images': images,
+      'ingredients': ingredients,
+      'manufacturer': manufacturer,
+      'onlineStores': onlineStores,
+      'title': title,
+    };
+  }
 
-  OnlineStore({
-    required this.name,
-    required this.price,
-    required this.url,
-  });
-
-  factory OnlineStore.fromJson(Map<String, dynamic> json) {
-    return OnlineStore(
-      name: json['name'],
-      price: json['price'],
-      url: json['url'],
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      artist: map['artist'],
+      attributes: map['attributes'],
+      author: map['author'],
+      barcodeFormats: map['barcodeFormats'],
+      brand: map['brand'],
+      category: map['category'],
+      description: map['description'],
+      features: map['features'],
+      images: map['images'],
+      ingredients: map['ingredients'],
+      manufacturer: map['manufacturer'],
+      onlineStores: map['onlineStores'],
+      title: map['title'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'Product(artist: $artist, attributes: $attributes, author: $author, barcodeFormats: $barcodeFormats, brand: $brand, category: $category, description: $description, features: $features, images: $images, ingredients: $ingredients, manufacturer: $manufacturer, onlineStores: $onlineStores, title: $title)';
   }
 }

@@ -12,36 +12,62 @@ Future<Product?> fetchProductData(String barcode) async {
   final response = await http.get(url, headers: headers);
 
   if (response.statusCode == 200) {
-    final dynamic jsonResponse = json.decode(response.body);
+    final jsonResponse = json.decode(response.body);
     print(response.body);
 
-    if (response.statusCode == 200) {
-      final dynamic jsonResponse = json.decode(response.body);
-      print(response.body);
+    if (jsonResponse != null) {
+      final productData = jsonResponse['product'];
 
-      if (jsonResponse != null) {
-        final dynamic productData = jsonResponse['product'];
-
-        if (productData is List) {
-          // Manejar el caso de una lista de productos
-          if (productData.isNotEmpty) {
-            final jsonMap = productData.first;
-            return Product.fromJson(jsonMap);
-          } else {
-            throw Exception('Empty product list');
-          }
-        } else if (productData is Map<String, dynamic>) {
-          // Manejar el caso de un solo producto
-          return Product.fromJson(productData);
+      if (productData is List) {
+        // Manejar el caso de una lista de productos
+        if (productData.isNotEmpty) {
+          final jsonMap = productData.first;
+          print(Product.fromJson(jsonMap).toString());
+          return Product.fromJson(jsonMap);
         } else {
-          throw Exception('Invalid product data');
+          throw Exception('Empty product list');
         }
+      } else if (productData is Map<String, dynamic>) {
+        // Manejar el caso de un solo producto
+        final attributes = productData['attributes'] ?? [];
+        final category = productData['category'] ?? [];
+        final description = productData['description'] ?? '';
+        final features = productData['features'] ?? [];
+        final images = productData['images'] ?? [];
+        final manufacturer = productData['manufacturer'] ?? '';
+        final onlineStores = productData['online_stores'] ?? [];
+        final title = productData['title'] ?? '';
+
+        final correctedProductData = {
+          'attributes': attributes,
+          'category': category,
+          'description': description,
+          'features': features,
+          'images': images,
+          'manufacturer': manufacturer,
+          'online_stores': onlineStores,
+          'title': title,
+        };
+
+        return Product.fromJson(correctedProductData);
       } else {
-        throw Exception('Invalid response');
+        return Product(
+            artist: null,
+            attributes: null,
+            author: null,
+            barcodeFormats: null,
+            brand: null,
+            category: null,
+            description: '',
+            features: null,
+            images: null,
+            ingredients: null,
+            manufacturer: null,
+            onlineStores: null,
+            title: '');
       }
     } else {
-      throw Exception('Failed to fetch product data');
+      throw Exception('Invalid response');
     }
   }
-  return null;
 }

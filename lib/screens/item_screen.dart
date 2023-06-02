@@ -73,13 +73,13 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     if (value.length < 4) {
                       return 'El nombre debe tener al menos 4 caracteres';
                     }
-                    if (value.length > 30) {
-                      return 'El nombre no puede tener más de 30 caracteres';
+                    if (value.length > 80) {
+                      return 'El nombre no puede tener más de 80 caracteres';
                     }
 
                     return null;
                   },
-                  maxLength: 30,
+                  maxLength: 80,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Descripción'),
@@ -232,6 +232,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     print(item.toString());
                     addItemToSelectedList(item);
                     userProvider.getCurrentUserWithLists();
+
                     Navigator.of(context).pop();
                   }
                 },
