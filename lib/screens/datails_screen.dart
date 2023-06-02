@@ -21,7 +21,7 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var barcode = '';
+  var barcodes = '';
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<void> openBarcodeScanner() async {
-    this.barcode = '';
+    this.barcodes = '';
     String barcode = await FlutterBarcodeScanner.scanBarcode(
       '#FF0000', // Color de la barra de escaneo
       'Cancelar', // Texto del botón de cancelar
@@ -85,7 +85,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     print('Barcode: ' + barcode);
 
     if (barcode != '-1' && barcode.isNotEmpty) {
-      this.barcode = barcode;
+      this.barcodes = barcode;
       final provider = Provider.of<ItemFormProvider>(context, listen: false);
       provider.barcode = this.barcode;
       _performAPICall();
