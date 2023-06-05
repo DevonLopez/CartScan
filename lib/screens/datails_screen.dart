@@ -134,6 +134,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color.fromARGB(255, 150, 226, 88),
         title: Text(tituloCabecera),
       ),
@@ -173,7 +174,7 @@ class _DetailsScreenBody extends StatelessWidget {
         return const ListScreen();
 
       case 1:
-        return const CompareScreen();
+        return CompareScreen();
 
       case 2:
         return SearchScreen();

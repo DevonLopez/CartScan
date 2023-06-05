@@ -17,7 +17,9 @@ class _ListDetailScreenState extends State<ListDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(248, 229, 165, 1),
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 150, 226, 88),
         title: Text(widget.shoppingList.name),
       ),
       body: ListView.builder(

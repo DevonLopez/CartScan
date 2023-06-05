@@ -1,3 +1,4 @@
+import 'package:cart_scan/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'screens.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const DetailsScreen();
+            return const SplashScreen();
           } else {
             return const LoginOrRegiserPage();
           }

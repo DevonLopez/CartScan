@@ -23,6 +23,10 @@ class UserProvider with ChangeNotifier {
     _isDataFetch = valor;
   }
 
+  set itemList(List<Item> items) {
+    _itemList = items;
+  }
+
   Future<void> getCurrentUserWithLists() async {
     try {
       _currentUser = await getUserData();

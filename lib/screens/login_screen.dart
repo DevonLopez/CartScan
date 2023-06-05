@@ -22,8 +22,9 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 124, 190, 69),
+      backgroundColor: Color.fromARGB(255, 111, 173, 60),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,8 +36,8 @@ class _LogInScreenState extends State<LogInScreen> {
             Image.asset(
               'assets/logoCart.png',
               fit: BoxFit.cover,
-              cacheHeight: 200,
-              cacheWidth: 220,
+              cacheHeight: (size.height * 0.3).round(),
+              cacheWidth: (size.width * 0.7).round(),
             ),
             fieldEmail(),
             const Divider(
@@ -47,7 +48,7 @@ class _LogInScreenState extends State<LogInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(
-                  width: 180,
+                  width: 170,
                   height: 50,
                 ),
                 TextButton(

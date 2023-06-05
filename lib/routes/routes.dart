@@ -10,7 +10,7 @@ var customRoutes = <String, WidgetBuilder>{
   'scan': (context) => const ScanScreen(),
   'list': (context) => const ListScreen(),
   'search': (context) => SearchScreen(),
-  'compare': (context) => const CompareScreen(),
+  'compare': (context) => CompareScreen(),
   'itemForm': (context) {
     final Item? itemBarcode =
         ModalRoute.of(context)?.settings.arguments as Item?;

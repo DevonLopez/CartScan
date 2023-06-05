@@ -18,6 +18,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.itemList = [];
       userProvider.getItems().then((_) {
         setState(() {
           userItems = userProvider.itemList;

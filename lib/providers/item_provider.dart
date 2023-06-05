@@ -12,7 +12,7 @@ class ItemFormProvider extends ChangeNotifier {
       discount: 0,
       offer: false,
       description: '',
-      quality: 5);
+      quality: 0);
 
   bool get offer => _offer;
   String get barcode => _barcode;

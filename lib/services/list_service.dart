@@ -144,6 +144,12 @@ Future<UserModel> getUserData() async {
   return userModel;
 }
 
+Future<void> updateItem(Item item) async {
+  print('Itema para actualizar: ${item.toString()}');
+  final itemDoc = db.collection('items').doc(item.id);
+  itemDoc.set(item.toMap());
+}
+
 Future<void> addUserToCollection(String name) async {
   print('addUser');
   final userDoc = FirebaseFirestore.instance
