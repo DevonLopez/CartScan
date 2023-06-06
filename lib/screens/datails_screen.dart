@@ -25,10 +25,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      // Perform your state update here
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       userProvider.getItems();
     });
@@ -96,28 +94,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget cancelButton = TextButton(
-      child: const Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Continue"),
-      onPressed: () async {
-        await GoogleSignIn().signOut();
-        FirebaseAuth.instance.signOut();
-        Navigator.of(context).pop();
-      },
-    );
-    AlertDialog alert = AlertDialog(
-      title: const Text("Cerrar Sesión"),
-      content: const Text("Estas seguro que quieres cerrar sesión?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
     final uiProvider = Provider.of<UIProvider>(context);
 
     final currentIndex = uiProvider.menuOpt;
