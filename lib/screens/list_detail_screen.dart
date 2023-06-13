@@ -77,8 +77,8 @@ class _ListDetailScreenState extends State<ListDetailScreen> {
             },
             child: ListTile(
               title: Text(item.name),
-              subtitle: Text(item.description!),
-              trailing: Text('\$${item.price.toStringAsFixed(2)}'),
+              trailing: Text(
+                  '${(item.price * (1 - item.discount / 100)).toStringAsFixed(2)}€'),
               onTap: () {
                 Navigator.push(
                   context,

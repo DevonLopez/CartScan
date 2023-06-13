@@ -70,25 +70,44 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   Future<void> openBarcodeScanner() async {
-    this.barcode = '';
-    String barcode = await FlutterBarcodeScanner.scanBarcode(
-      '#FF0000', // Color de la barra de escaneo
-      'Cancelar', // Texto del botón de cancelar
-      false, // Desactivar el flash
-      ScanMode.DEFAULT, // Modo de escaneo predeterminado
-    );
-    //this.barcode = "5449000000996";
-    //this.barcode = "5060639121915";
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    print('Barcode: ' + barcode);
+    if (userProvider.userLists.isNotEmpty) {
+      this.barcode = '';
 
-    if (barcode != '-1' && barcode.isNotEmpty) {
-      this.barcode = barcode;
-      final provider = Provider.of<ItemFormProvider>(context, listen: false);
-      provider.barcode = this.barcode;
-      _performAPICall();
+      String barcode = await FlutterBarcodeScanner.scanBarcode(
+        '#FF0000', // Color de la barra de escaneo
+        'Cancelar', // Texto del botón de cancelar
+        false, // Desactivar el flash
+        ScanMode.DEFAULT, // Modo de escaneo predeterminado
+      );
+
+      print('Barcode: ' + barcode);
+
+      if (barcode != '-1' && barcode.isNotEmpty) {
+        this.barcode = barcode;
+        final provider = Provider.of<ItemFormProvider>(context, listen: false);
+        provider.barcode = this.barcode;
+        _performAPICall();
+      } else {
+        Navigator.pushNamed(context, 'details');
+      }
     } else {
-      Navigator.pushNamed(context, 'details');
+      // No hay listas creadas, muestra un mensaje o realiza alguna otra acción
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('No hay listas creadas'),
+          content: Text(
+              'Por favor, crea una lista antes de escanear códigos de barras.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 

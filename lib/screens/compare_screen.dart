@@ -78,12 +78,10 @@ class _CompareScreenState extends State<CompareScreen> {
   void _generateChartData() {
     _chartData.clear();
 
-    // Generate series for each selected item
     for (Item item in _selectedItems) {
       List<charts.Series<Item, String>> seriesList = [];
 
       if (item.offer) {
-        // Calculate offer price and add it as a separate series
         double offerPrice = item.price * (1 - (item.discount / 100));
         seriesList.add(
           charts.Series<Item, String>(
@@ -96,7 +94,6 @@ class _CompareScreenState extends State<CompareScreen> {
         );
       }
 
-      // Add original price series
       seriesList.add(
         charts.Series<Item, String>(
           id: '${item.name} (Precio Original)',

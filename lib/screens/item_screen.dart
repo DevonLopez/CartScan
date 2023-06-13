@@ -34,15 +34,10 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
 
   @override
   Widget build(BuildContext context) {
+    double discount;
+    int quality = 0;
     final size = MediaQuery.of(context).size;
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    String id = '';
-    String name = '';
-    String? description = '';
-    double price = 0.0;
-    double discount = 0.0;
-    int? quality = 0;
-    bool offer = false;
     final itemFormProvider =
         Provider.of<ItemFormProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -72,7 +67,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                       initialValue: itemBarcode!.name ?? '',
                       onChanged: (value) {
                         itemFormProvider.scanned.name = value;
-                        name = value;
                         itemBarcode!.name = value;
                       },
                       validator: (value) {
@@ -95,8 +89,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                           const InputDecoration(labelText: 'Descripción'),
                       initialValue: itemBarcode!.description ?? '',
                       onChanged: (value) {
-                        description = value;
-                        itemFormProvider.scanned.description = description!;
+                        itemFormProvider.scanned.description = value;
                         itemBarcode!.description = value;
                       },
                       validator: (value) {
@@ -111,7 +104,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                         }
                         return null;
                       },
-                      maxLength: 200,
+                      maxLength: 1000,
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: 'Precio'),
@@ -125,7 +118,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                           TextInputType.numberWithOptions(decimal: true),
                       onChanged: (value) {
                         try {
-                          price = double.parse(value);
+                          double price = double.parse(value);
                           itemFormProvider.scanned.price = price;
                           itemBarcode!.price = price;
                         } catch (e) {

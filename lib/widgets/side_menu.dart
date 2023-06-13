@@ -97,8 +97,11 @@ class SideMenu extends StatelessWidget {
                         onPressed: () async {
                           await GoogleSignIn().signOut();
                           FirebaseAuth.instance.signOut();
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            'home',
+                            (Route<dynamic> route) => false,
+                          );
                         },
                       ),
                     ],

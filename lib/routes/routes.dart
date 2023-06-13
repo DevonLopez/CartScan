@@ -11,6 +11,8 @@ var customRoutes = <String, WidgetBuilder>{
   'list': (context) => const ListScreen(),
   'search': (context) => SearchScreen(),
   'compare': (context) => CompareScreen(),
+  'Reset': (context) => ResetScreen(),
+  'log': (context) => LoginOrRegiserPage(),
   'itemForm': (context) {
     final Item? itemBarcode =
         ModalRoute.of(context)?.settings.arguments as Item?;

@@ -39,8 +39,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _email.text.trim(), password: _constrasena.text.trim());
-      addUserToCollection(_name.text);
+        email: _email.text.trim(),
+        password: _constrasena.text.trim(),
+      );
+      await addUserToCollection(_name.text);
     } on FirebaseAuthException {
       Utils.showSnackBar(
           "El correo electrónico que has introducido ya está en uso");
@@ -49,6 +51,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 124, 190, 69),
       body: Form(
@@ -56,20 +60,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(
-                height: 50,
-              ),
-              Image.asset(
-                'assets/logoCart.png',
-                fit: BoxFit.cover,
-                cacheHeight: 200,
-                cacheWidth: 220,
-              ),
-              const Padding(
+              SizedBox(height: size.height * 0.1),
+              Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: Text(
                   'Completa los siguientes campos:',
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontSize: size.width * 0.05),
                 ),
               ),
               fieldName(),
@@ -88,9 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onTap: signUp,
                 text: "Registrar",
               ),
-              const SizedBox(
-                height: 50,
-              ),
+              SizedBox(height: size.height * 0.05),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

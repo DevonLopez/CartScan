@@ -4,12 +4,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../utils/utils.dart';
 
 class LogInScreen extends StatefulWidget {
   final Function()? onTap;
-  const LogInScreen({super.key, required this.onTap});
+  const LogInScreen({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
@@ -17,8 +18,14 @@ class LogInScreen extends StatefulWidget {
 
 class _LogInScreenState extends State<LogInScreen> {
   final _email = TextEditingController();
+  final _password = TextEditingController();
 
-  final _constrasena = TextEditingController();
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +50,7 @@ class _LogInScreenState extends State<LogInScreen> {
             const Divider(
               color: Color.fromARGB(0, 0, 0, 0),
             ),
-            fieldPassword(context),
+            fieldPassword(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -57,7 +64,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         arguments: _email.text);
                   },
                   child: const Text('Olvidaste la contraseña?'),
-                )
+                ),
               ],
             ),
             MyButton(
@@ -86,7 +93,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -116,7 +123,7 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  Widget fieldPassword(BuildContext context) {
+  Widget fieldPassword() {
     final passwProvider = Provider.of<LoginProvider>(context);
 
     return SizedBox(
@@ -126,7 +133,7 @@ class _LogInScreenState extends State<LogInScreen> {
         validator: (valor) => valor != null && valor.length < 6
             ? 'Introduce un mínimo de 6 letras'
             : null,
-        controller: _constrasena,
+        controller: _password,
         obscureText: passwProvider.password,
         decoration: InputDecoration(
           labelText: 'Contraseña',
@@ -149,17 +156,12 @@ class _LogInScreenState extends State<LogInScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _email.dispose();
-    _constrasena.dispose();
-    super.dispose();
-  }
-
-  Future signIn() async {
+  Future<void> signIn() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _email.text.trim(), password: _constrasena.text.trim());
+        email: _email.text.trim(),
+        password: _password.text.trim(),
+      );
     } on FirebaseAuthException {
       Utils.showSnackBar(
           "El correo electrónico o la contraseña no son correctos");
