@@ -85,26 +85,39 @@ class _CompareScreenState extends State<CompareScreen> {
         double offerPrice = item.price * (1 - (item.discount / 100));
         seriesList.add(
           charts.Series<Item, String>(
-            id: '${item.name} (Oferta)',
+            id: '${_getLimitedName(item.name)} (Oferta)',
             data: [item],
-            domainFn: (Item item, _) => item.name,
+            domainFn: (Item item, _) => _getLimitedName(item.name),
             measureFn: (Item item, _) => offerPrice,
             colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.green),
+            labelAccessorFn: (Item item, _) =>
+                '\$${offerPrice.toStringAsFixed(2)}',
           ),
         );
       }
 
       seriesList.add(
         charts.Series<Item, String>(
-          id: '${item.name} (Precio Original)',
+          id: '${_getLimitedName(item.name)} (Precio Original)',
           data: [item],
-          domainFn: (Item item, _) => item.name,
+          domainFn: (Item item, _) => _getLimitedName(item.name),
           measureFn: (Item item, _) => item.price,
           colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.blue),
+          labelAccessorFn: (Item item, _) =>
+              '\$${item.price.toStringAsFixed(2)}',
         ),
       );
 
       _chartData.addAll(seriesList);
+    }
+  }
+
+  String _getLimitedName(String name) {
+    List<String> words = name.split(' ');
+    if (words.length > 2) {
+      return words.sublist(0, 2).join(' ');
+    } else {
+      return name;
     }
   }
 }

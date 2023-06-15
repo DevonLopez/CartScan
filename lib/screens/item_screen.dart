@@ -9,6 +9,7 @@ import '../providers/item_provider.dart';
 
 class ItemScreenForm extends StatefulWidget {
   final Item? itemBarcode;
+
   const ItemScreenForm({Key? key, required this.itemBarcode}) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
   late List<String> userLists;
   String? selectedListName;
   late Item? copy = itemBarcode;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
     double discount;
     int quality = 0;
     final size = MediaQuery.of(context).size;
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final itemFormProvider =
         Provider.of<ItemFormProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -58,7 +59,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
             padding: EdgeInsets.all(size.width * 0.08),
             children: [
               Form(
-                //key: formKey,
+                key: formKey,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Column(
                   children: [
@@ -79,7 +80,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                         if (value.length > 80) {
                           return 'El nombre no puede tener más de 80 caracteres';
                         }
-
                         return null;
                       },
                       maxLength: 80,
@@ -216,8 +216,9 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                     DropdownButton<String>(
                       value: selectedListName,
                       onChanged: (value) async {
-                        selectedListName = value!;
-                        setState(() {});
+                        setState(() {
+                          selectedListName = value!;
+                        });
                         await userProvider.getListId(value!);
                         itemFormProvider.scanned.listId = userProvider.listId;
                       },
@@ -251,8 +252,7 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
               ElevatedButton(
                 child: const Text('Guardar'),
                 onPressed: () {
-                  // if (formKey.currentState!.validate()) {
-                  if (true) {
+                  if (formKey.currentState!.validate()) {
                     if (itemBarcode!.id != null) {
                       updateItem(
                         Item(
@@ -302,24 +302,6 @@ class _ItemScreenFormState extends State<ItemScreenForm> {
                       userProvider.getCurrentUserWithLists();
                       Navigator.of(context).pop();
                     }
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Campos sin completar"),
-                          content: const Text("Completa los campos necesarios"),
-                          actions: [
-                            TextButton(
-                              child: const Text("Aceptar"),
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
                   }
                 },
               ),
